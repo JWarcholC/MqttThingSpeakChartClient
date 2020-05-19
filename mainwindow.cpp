@@ -128,6 +128,13 @@ auto MainWindow::convert_connection_state() const -> QString {
 
 void MainWindow::on_buttonChart_clicked()
 {
+    if(series_map->isEmpty() || std::all_of(series_map->begin(), series_map->end(), [](auto& l) { return l.isEmpty(); })) {
+        auto error_cause = QDateTime::currentDateTime().toString() +
+                " No data to show on chart!\n";
+        ui->editLog->insertPlainText(error_cause);
+        return;
+    }
+
     ui_chart = new chart_view(series_map);
     auto cur_geometry = geometry();
     auto chart_geometry = QRect{cur_geometry.x() +  cur_geometry.width() + 10, cur_geometry.y(), 650, 650};
